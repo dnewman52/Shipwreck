@@ -1,0 +1,22 @@
+stages:
+  - test
+  - build&deploy
+
+
+unit-test:
+  script: C:\"Program Files"\Unity\Hub\Editor\2019.2.17f1\Editor\Unity.exe -batchmode -projectPath . -runTests -testPlatform editmode -logFile -testResults .\unit-tests.xml -quit
+  stage: test
+  tags:
+    - unity
+
+win-deploy:
+  script:
+   - C:\"Program Files"\Unity\Hub\Editor\2019.2.17f1\Editor\Unity.exe -batchmode -projectPath ./Shipwreck -buildWindowsPlayer ToDeploy\build.exe -logFile logfile.xml -quit
+  after_script: 
+   - C:\Butler\butler.exe push ./Shipwreck/ToDeploy eaglebyte/shipwrecked:windows-32-beta   
+  stage: build&deploy
+  tags:
+    - unity
+    
+    
+
